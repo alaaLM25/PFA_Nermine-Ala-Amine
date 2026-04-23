@@ -30,6 +30,10 @@ public class Product {
 
     private String imageUrl;
 
+    @Size(max = 100, message = "Category must not exceed 100 characters")
+    @Column(length = 100)
+    private String category;
+
     @NotNull(message = "Stock is required")
     @Min(value = 0, message = "Stock must be non-negative")
     @Column(nullable = false)
@@ -37,12 +41,13 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String name, String description, Double price, String imageUrl, Integer stock) {
+    public Product(Long id, String name, String description, Double price, String imageUrl, String category, Integer stock) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
         this.stock = stock;
     }
 
@@ -55,6 +60,7 @@ public class Product {
         private String description;
         private Double price;
         private String imageUrl;
+        private String category;
         private Integer stock;
 
         public Builder id(Long id) { this.id = id; return this; }
@@ -62,8 +68,9 @@ public class Product {
         public Builder description(String description) { this.description = description; return this; }
         public Builder price(Double price) { this.price = price; return this; }
         public Builder imageUrl(String imageUrl) { this.imageUrl = imageUrl; return this; }
+        public Builder category(String category) { this.category = category; return this; }
         public Builder stock(Integer stock) { this.stock = stock; return this; }
-        public Product build() { return new Product(id, name, description, price, imageUrl, stock); }
+        public Product build() { return new Product(id, name, description, price, imageUrl, category, stock); }
     }
 
     // Getters
@@ -72,6 +79,7 @@ public class Product {
     public String getDescription() { return description; }
     public Double getPrice() { return price; }
     public String getImageUrl() { return imageUrl; }
+    public String getCategory() { return category; }
     public Integer getStock() { return stock; }
 
     // Setters
@@ -80,5 +88,6 @@ public class Product {
     public void setDescription(String description) { this.description = description; }
     public void setPrice(Double price) { this.price = price; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setCategory(String category) { this.category = category; }
     public void setStock(Integer stock) { this.stock = stock; }
 }
