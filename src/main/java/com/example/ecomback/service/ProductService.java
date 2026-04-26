@@ -13,6 +13,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ProductService {
@@ -28,6 +31,14 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public Page<Product> getProductsPaginated(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (search != null && !search.isEmpty()) {
+            return productRepository.findByNameContainingIgnoreCase(search, pageable);
+        }
+        return productRepository.findAll(pageable);
     }
 
     public Product getProductById(Long id) {
