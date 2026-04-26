@@ -30,15 +30,15 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findByActiveTrue();
     }
 
     public Page<Product> getProductsPaginated(String search, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         if (search != null && !search.isEmpty()) {
-            return productRepository.findByNameContainingIgnoreCase(search, pageable);
+            return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(search, pageable);
         }
-        return productRepository.findAll(pageable);
+        return productRepository.findByActiveTrue(pageable);
     }
 
     public Product getProductById(Long id) {
@@ -95,9 +95,8 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
-        // Delete image file when product is deleted
-        deleteOldImage(product.getImageUrl());
-        productRepository.delete(product);
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     /**

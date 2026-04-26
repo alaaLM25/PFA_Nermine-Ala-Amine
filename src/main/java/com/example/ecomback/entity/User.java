@@ -30,16 +30,20 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean active = true;
+
     // ── No-arg constructor required by JPA ──────────────────────────────────
     public User() {}
 
     // ── All-args constructor ─────────────────────────────────────────────────
-    public User(Long id, String name, String email, String password, Role role) {
+    public User(Long id, String name, String email, String password, Role role, boolean active) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.active = active;
     }
 
     // ── Builder ──────────────────────────────────────────────────────────────
@@ -53,15 +57,17 @@ public class User implements UserDetails {
         private String email;
         private String password;
         private Role role;
+        private boolean active = true;
 
         public Builder id(Long id)             { this.id = id;           return this; }
         public Builder name(String name)       { this.name = name;       return this; }
         public Builder email(String email)     { this.email = email;     return this; }
         public Builder password(String pwd)    { this.password = pwd;    return this; }
         public Builder role(Role role)         { this.role = role;       return this; }
+        public Builder active(boolean active)  { this.active = active;   return this; }
 
         public User build() {
-            return new User(id, name, email, password, role);
+            return new User(id, name, email, password, role, active);
         }
     }
 
@@ -70,6 +76,7 @@ public class User implements UserDetails {
     public String getName()   { return name; }
     public String getEmail()  { return email; }
     public Role getRole()     { return role; }
+    public boolean isActive() { return active; }
 
     // ── Setters ──────────────────────────────────────────────────────────────
     public void setId(Long id)           { this.id = id; }
@@ -77,6 +84,7 @@ public class User implements UserDetails {
     public void setEmail(String email)   { this.email = email; }
     public void setPassword(String pwd)  { this.password = pwd; }
     public void setRole(Role role)       { this.role = role; }
+    public void setActive(boolean active){ this.active = active; }
 
     // ── UserDetails interface ─────────────────────────────────────────────────
     @Override
@@ -112,6 +120,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }

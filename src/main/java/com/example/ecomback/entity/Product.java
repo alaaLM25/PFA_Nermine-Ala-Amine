@@ -39,9 +39,12 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean active = true;
+
     public Product() {}
 
-    public Product(Long id, String name, String description, Double price, String imageUrl, String category, Integer stock) {
+    public Product(Long id, String name, String description, Double price, String imageUrl, String category, Integer stock, boolean active) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,6 +52,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
         this.stock = stock;
+        this.active = active;
     }
 
     // Builder
@@ -62,6 +66,7 @@ public class Product {
         private String imageUrl;
         private String category;
         private Integer stock;
+        private boolean active = true;
 
         public Builder id(Long id) { this.id = id; return this; }
         public Builder name(String name) { this.name = name; return this; }
@@ -70,7 +75,8 @@ public class Product {
         public Builder imageUrl(String imageUrl) { this.imageUrl = imageUrl; return this; }
         public Builder category(String category) { this.category = category; return this; }
         public Builder stock(Integer stock) { this.stock = stock; return this; }
-        public Product build() { return new Product(id, name, description, price, imageUrl, category, stock); }
+        public Builder active(boolean active) { this.active = active; return this; }
+        public Product build() { return new Product(id, name, description, price, imageUrl, category, stock, active); }
     }
 
     // Getters
@@ -81,6 +87,7 @@ public class Product {
     public String getImageUrl() { return imageUrl; }
     public String getCategory() { return category; }
     public Integer getStock() { return stock; }
+    public boolean isActive() { return active; }
 
     // Setters
     public void setId(Long id) { this.id = id; }
@@ -90,4 +97,5 @@ public class Product {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public void setCategory(String category) { this.category = category; }
     public void setStock(Integer stock) { this.stock = stock; }
+    public void setActive(boolean active) { this.active = active; }
 }

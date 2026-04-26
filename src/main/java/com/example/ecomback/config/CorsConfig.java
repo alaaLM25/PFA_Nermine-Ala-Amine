@@ -23,7 +23,8 @@ public class CorsConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin"));
         configuration.setExposedHeaders(List.of("Authorization"));
-        configuration.setAllowCredentials(false); // must be false when allowedOrigins contains "*"
+        boolean hasWildcard = Arrays.asList(allowedOrigins.split(",")).contains("*");
+        configuration.setAllowCredentials(!hasWildcard); // must be false when allowedOrigins contains "*"
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

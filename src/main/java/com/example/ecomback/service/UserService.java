@@ -6,6 +6,9 @@ import com.example.ecomback.entity.User;
 import com.example.ecomback.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,9 +25,14 @@ public class UserService {
     }
 
     public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
+        return userRepository.findByActiveTrue().stream()
                 .map(UserDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public Page<UserDTO> getUsersPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findByActiveTrue(pageable).map(UserDTO::fromEntity);
     }
 
     public UserDTO getUserById(Long id) {
@@ -49,11 +57,12 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.delete(user);
+        user.setActive(false);
+        userRepository.save(user);
     }
 
     public long countUsers() {
-        return userRepository.count();
+        return userRepository.countByActiveTrue();
     }
 
     public long countByRole(Role role) {
